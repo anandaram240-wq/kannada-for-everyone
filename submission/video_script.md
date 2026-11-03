@@ -13,7 +13,7 @@
 - [ ] **Resolution:** 1080p (1920x1080) or 1440p desktop browser window.
 - [ ] **Zoom:** Set browser zoom to 100% or 110% for crisp typography and large Kannada font rendering.
 - [ ] **Audio:** Clear microphone audio without background noise or room echo.
-- [ ] **Browser:** Google Chrome or Edge with web server running at `http://localhost:5173`.
+- [ ] **Browser:** Google Chrome or Edge with web server running at `http://localhost:3000`.
 - [ ] **Drive Link:** Upload final `.mp4` / `.mov` to Google Drive and ensure link access is set to **"Anyone with the link can view"**.
 
 ---

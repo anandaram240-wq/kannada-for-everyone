@@ -40,8 +40,8 @@ async function runAudit() {
 
   try {
     // 1. Open Homepage
-    console.log('Navigating to http://127.0.0.1:5173...');
-    await page.goto('http://127.0.0.1:5173', { waitUntil: 'domcontentloaded' });
+    console.log('Navigating to http://127.0.0.1:3000...');
+    await page.goto('http://127.0.0.1:3000', { waitUntil: 'domcontentloaded' });
     await new Promise((r) => setTimeout(r, 1200));
     await page.waitForSelector('h1');
     const titleText = await page.$eval('h1', (el) => el.innerText);
