@@ -1,0 +1,68 @@
+// Badges & Achievements Definition
+
+export const BADGES = [
+  {
+    id: 'badge_first_word',
+    name: 'First Word',
+    title: 'ಮೊದಲ ಹೆಜ್ಜೆ (First Step)',
+    description: 'Marked your first Kannada word as learned.',
+    icon: '🌱',
+    condition: (state) => state.learnedWords.length >= 1,
+  },
+  {
+    id: 'badge_vocab_10',
+    name: 'Vocabulary Explorer',
+    title: 'ಪದ ಸಂಪತ್ತು (Word Explorer)',
+    description: 'Learned 10 useful everyday Kannada words.',
+    icon: '📚',
+    condition: (state) => state.learnedWords.length >= 10,
+  },
+  {
+    id: 'badge_vocab_25',
+    name: 'Kannada Champion',
+    title: 'ಕನ್ನಡ ಸಾಧಕ (Kannada Achiever)',
+    description: 'Mastered 25 or more Kannada vocabulary words.',
+    icon: '👑',
+    condition: (state) => state.learnedWords.length >= 25,
+  },
+  {
+    id: 'badge_first_conv',
+    name: 'Conversation Starter',
+    title: 'ಮಾತುಕತೆ (First Dialogue)',
+    description: 'Completed your first real-world conversation lesson.',
+    icon: '💬',
+    condition: (state) => state.completedConversations.length >= 1,
+  },
+  {
+    id: 'badge_darshini',
+    name: 'Darshini Master',
+    title: 'ತಿಂಡಿ ಪ್ರಿಯ (Food Connoisseur)',
+    description: 'Completed the Restaurant / Darshini conversation.',
+    icon: '☕',
+    condition: (state) => state.completedConversations.includes('conv_3'),
+  },
+  {
+    id: 'badge_auto',
+    name: 'Auto Meter Pro',
+    title: 'ಆಟೋ ರಾಜ (Auto Navigator)',
+    description: 'Completed the Auto Rickshaw conversation lesson.',
+    icon: '🛺',
+    condition: (state) => state.completedConversations.includes('conv_2'),
+  },
+  {
+    id: 'badge_situation_3',
+    name: 'Real-Life Survivor',
+    title: 'ನೈಜ ಅನುಭವ (Street Smart)',
+    description: 'Completed 3 or more real-life interactive scenarios.',
+    icon: '🏙️',
+    condition: (state) => state.completedSituations.length >= 3,
+  },
+  {
+    id: 'badge_quiz_master',
+    name: 'Quiz Master',
+    title: 'ಪ್ರಶ್ನೋತ್ತರ ವಿಜೇತ (Quiz Champ)',
+    description: 'Scored 80% or higher in a Kannada quiz.',
+    icon: '🏆',
+    condition: (state) => state.quizHistory.some((q) => q.percentage >= 80),
+  },
+];

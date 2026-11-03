@@ -1,0 +1,516 @@
+const puppeteer = require('puppeteer-core');
+const path = require('path');
+const fs = require('fs');
+
+async function generatePDF() {
+  console.log('Generating hackathon presentation PDF...');
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kannada for Everyone Presentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+Kannada:wght@600;700;800&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #1e293b;
+      background: #0f172a;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      page-break-after: always;
+      background: #faf8f5;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 80px 100px;
+    }
+    .slide-dark {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+    .kannada-font {
+      font-family: 'Noto Sans Kannada', sans-serif;
+    }
+    .header-tag {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #c2410c;
+      background: #ffedd5;
+      padding: 8px 20px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+    .header-tag-dark {
+      color: #f59e0b;
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+    h1 {
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: #0f172a;
+    }
+    h2 {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -1px;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+    p.lead {
+      font-size: 26px;
+      color: #475569;
+      line-height: 1.5;
+      max-width: 1400px;
+    }
+    .footer-bar {
+      border-top: 2px solid #e2e8f0;
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .footer-bar-dark {
+      border-top: 2px solid #334155;
+      color: #64748b;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 36px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 36px;
+      border: 2px solid #f1f5f9;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+    .card-dark {
+      background: #1e293b;
+      border: 2px solid #334155;
+      color: #f8fafc;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1: TITLE SLIDE -->
+  <div class="slide slide-dark" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at 50% 30%, #1e293b 0%, #090d16 100%);">
+    <div style="max-width: 1400px;">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px;">
+        <div style="width: 80px; height: 80px; border-radius: 24px; background: linear-gradient(135deg, #dc2626, #f59e0b); display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 900; color: white;" class="kannada-font">
+          ಕ
+        </div>
+        <span class="header-tag header-tag-dark" style="font-size: 20px; margin-bottom: 0;">Kannada Digital Innovation Hackathon 2026</span>
+      </div>
+      
+      <h1 style="color: #ffffff; font-size: 88px; margin-bottom: 24px; letter-spacing: -2px;">
+        Kannada for Everyone
+      </h1>
+      
+      <p style="font-size: 38px; font-weight: 800; color: #fbbf24; margin-bottom: 24px;">
+        Learn Kannada. Speak with Confidence.
+      </p>
+
+      <p style="font-size: 24px; color: #94a3b8; max-width: 1000px; margin: 0 auto 50px auto; line-height: 1.6;">
+        "Practical Kannada for everyday life, one conversation at a time."<br>
+        A dedicated, zero-barrier language platform for students, employees, and newcomers in Karnataka.
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 40px; font-size: 20px; color: #cbd5e1; font-weight: 600;">
+        <div>📍 Organized by HackerRank Campus Crew & NIE Mysuru</div>
+        <div>🏆 Track: Problem Statement #1 — Kannada for Everyone</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: PROBLEM STATEMENT -->
+  <div class="slide">
+    <div>
+      <span class="header-tag">Slide 2 • Problem Statement</span>
+      <h2>The Real-World Language Barrier in Karnataka</h2>
+      <p class="lead">
+        Karnataka, home to Bengaluru — India's premier tech and educational capital — welcomes hundreds of thousands of new students, engineers, and professionals every year.
+      </p>
+    </div>
+
+    <div class="grid-3" style="margin: 40px 0;">
+      <div class="card" style="border-top: 6px solid #dc2626;">
+        <div style="font-size: 40px; margin-bottom: 16px;">🚌</div>
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Daily Commute Friction</h3>
+        <p style="font-size: 17px; color: #64748b; line-height: 1.6;">
+          Commuters struggle to hail auto rickshaws, negotiate meters, confirm BMTC bus destinations, and handle change in crowded transit hubs.
+        </p>
+      </div>
+
+      <div class="card" style="border-top: 6px solid #f59e0b;">
+        <div style="font-size: 40px; margin-bottom: 16px;">☕</div>
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Everyday Living & Dining</h3>
+        <p style="font-size: 17px; color: #64748b; line-height: 1.6;">
+          Ordering food at self-service Darshinis, asking vegetable vendors for rates per kg, and discussing rent with landlords feels intimidating.
+        </p>
+      </div>
+
+      <div class="card" style="border-top: 6px solid #0284c7;">
+        <div style="font-size: 40px; margin-bottom: 16px;">💼</div>
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 12px; color: #0f172a;">Workplace & Social Bonding</h3>
+        <p style="font-size: 17px; color: #64748b; line-height: 1.6;">
+          Non-Kannada speakers often feel culturally isolated, missing casual cafeteria banter and the warmth of connecting in the local language.
+        </p>
+      </div>
+    </div>
+
+    <div style="background: #f8fafc; border-radius: 20px; padding: 24px 32px; border-left: 6px solid #c2410c;">
+      <p style="font-size: 19px; font-weight: 700; color: #0f172a;">Official Hackathon Objective:</p>
+      <p style="font-size: 18px; color: #475569; margin-top: 4px;">
+        "Develop an interactive platform that helps non-Kannada speakers learn practical Kannada through everyday conversations, situations, vocabulary, and guided practice."
+      </p>
+    </div>
+
+    <div class="footer-bar">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 2 of 7</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: EXISTING SYSTEM VS GAPS -->
+  <div class="slide">
+    <div>
+      <span class="header-tag">Slide 3 • Market Analysis</span>
+      <h2>Existing Systems & Educational Gaps</h2>
+      <p class="lead">
+        Traditional language tools fail beginner adult learners who need immediate conversational fluency.
+      </p>
+    </div>
+
+    <div class="grid-2" style="margin: 40px 0;">
+      <div class="card" style="background: #fef2f2; border: 2px solid #fecaca;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <span style="font-size: 28px;">❌</span>
+          <h3 style="font-size: 26px; font-weight: 800; color: #991b1b;">Limitations of Current Tools</h3>
+        </div>
+        <ul style="list-style: none; space-y: 16px; font-size: 18px; color: #7f1d1d; line-height: 1.8;">
+          <li>• <strong>Isolated Vocabulary Lists:</strong> Memorizing words without knowing when or how to say them in a sentence.</li>
+          <li>• <strong>Academic Grammar Overload:</strong> Complex verb conjugations that intimidate complete beginners.</li>
+          <li>• <strong>No Real-World Context:</strong> Lack of practical scenarios like auto rickshaws, bus stands, and hospital visits.</li>
+          <li>• <strong>Sign-up & Paywall Barriers:</strong> Forced account registration before users can learn even a single word.</li>
+          <li>• <strong>Missing Phonetic Guidance:</strong> Beginners cannot read Kannada script without accurate transliterations.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="background: #f0fdf4; border: 2px solid #bbf7d0;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <span style="font-size: 28px;">✅</span>
+          <h3 style="font-size: 26px; font-weight: 800; color: #166534;">What Non-Kannadigas Actually Need</h3>
+        </div>
+        <ul style="list-style: none; space-y: 16px; font-size: 18px; color: #14532d; line-height: 1.8;">
+          <li>• <strong>Dialogue-First Learning:</strong> Hearing how Person A and Person B talk in authentic street settings.</li>
+          <li>• <strong>Situational Decision Training:</strong> Choosing what to say when an auto driver asks for double meter.</li>
+          <li>• <strong>Instant Audio Pronunciation:</strong> Web Speech API synthesis with clear Roman transliterations.</li>
+          <li>• <strong>Zero Friction:</strong> Open the browser and start practicing immediately without logins.</li>
+          <li>• <strong>Polite Cultural Etiquette:</strong> Knowing when to use "-ri", "-kodi" (respectful) vs "-kodu".</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 3 of 7</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: OUR SOLUTION -->
+  <div class="slide">
+    <div>
+      <span class="header-tag">Slide 4 • Our Solution</span>
+      <h2>Our Pedagogical Framework: The 4 Pillars</h2>
+      <p class="lead">
+        A structured, beginner-centric learning journey transforming hesitation into conversational confidence.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin: 40px 0;">
+      <div class="card" style="border-top: 6px solid #f59e0b; text-align: center;">
+        <div style="width: 70px; height: 70px; margin: 0 auto 20px auto; border-radius: 20px; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 32px;">📖</div>
+        <h4 style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">1. Vocabulary</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.6;">65+ high-frequency words across 12 categories with flashcards, examples, audio, and bookmarking.</p>
+      </div>
+
+      <div class="card" style="border-top: 6px solid #2563eb; text-align: center;">
+        <div style="width: 70px; height: 70px; margin: 0 auto 20px auto; border-radius: 20px; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 32px;">💬</div>
+        <h4 style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">2. Dialogues</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.6;">10 complete real-world conversations with Person A & B, line-by-line audio, and role-play mode.</p>
+      </div>
+
+      <div class="card" style="border-top: 6px solid #059669; text-align: center;">
+        <div style="width: 70px; height: 70px; margin: 0 auto 20px auto; border-radius: 20px; background: #d1fae5; display: flex; align-items: center; justify-content: center; font-size: 32px;">🧭</div>
+        <h4 style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">3. Situations</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.6;">10 real-life survival scenarios (auto, bus stand, Darshini, hospital) with interactive decision challenges.</p>
+      </div>
+
+      <div class="card" style="border-top: 6px solid #9333ea; text-align: center;">
+        <div style="width: 70px; height: 70px; margin: 0 auto 20px auto; border-radius: 20px; background: #f3e8ff; display: flex; align-items: center; justify-content: center; font-size: 32px;">🏆</div>
+        <h4 style="font-size: 22px; font-weight: 800; margin-bottom: 8px;">4. Practice</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.6;">Instant feedback quiz engine, streak tracking, unlockable achievement badges, and localStorage persistence.</p>
+      </div>
+    </div>
+
+    <div style="background: #ffffff; border-radius: 20px; padding: 24px 36px; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+      <div style="font-size: 18px; font-weight: 700; color: #0f172a;">
+        Key Innovation: Authentic Spoken Kannada + Web Speech API + 100% Offline Persistence
+      </div>
+      <span style="font-size: 15px; font-weight: 800; color: #059669; background: #ecfdf5; padding: 6px 16px; border-radius: 999px;">Zero Login Required</span>
+    </div>
+
+    <div class="footer-bar">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 4 of 7</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: KEY IMPLEMENTED FEATURES -->
+  <div class="slide">
+    <div>
+      <span class="header-tag">Slide 5 • Implemented Modules</span>
+      <h2>Core Functional Modules Walkthrough</h2>
+      <p class="lead">
+        All 5 core modules are genuinely functional, verified through 14 automated browser tests and live user interactions.
+      </p>
+    </div>
+
+    <div class="grid-3" style="margin: 36px 0;">
+      <div class="card">
+        <span class="badge" style="background: #fef3c7; color: #b45309;">Module 1</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Interactive Vocabulary</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">65+ curated entries across 12 categories. Includes real-time search, 3D flip flashcards, and "Mark as Learned" state.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="background: #dbeafe; color: #1d4ed8;">Module 2</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Real-World Dialogues</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">10 comprehensive everyday conversations (Auto, Darshini, BMTC, Clinic, Office). Line-by-line audio and comprehension check.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="background: #d1fae5; color: #047857;">Module 3</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Scenario Simulations</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">10 interactive situational scenarios with cultural etiquette tips, partner response expectations, and scenario decision quizzes.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="background: #f3e8ff; color: #7e22ce;">Module 4</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Quiz Engine & Review</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">Categorized tracks (Quick 5-min Sprint, Situational), instant pedagogical explanations, confetti celebration, and question-by-question review.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="background: #fee2e2; color: #b91c1c;">Module 5</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Learner Dashboard</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">Weighted progress bar, daily practice streak counter, 8 unlockable badges, bookmarked words quick list, and reset modal.</p>
+      </div>
+
+      <div class="card">
+        <span class="badge" style="background: #e0f2fe; color: #0369a1;">Module 6</span>
+        <h4 style="font-size: 20px; font-weight: 800; margin-bottom: 10px;">Phonetics & Web Speech</h4>
+        <p style="font-size: 15px; color: #64748b; line-height: 1.5;">Kannada vowels (ಸ್ವರಗಳು), speed controls (0.7x, 0.85x, 1.0x), voice diagnostic check, and transparent educational fallback.</p>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 5 of 7</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: TECHNICAL STACK & ARCHITECTURE -->
+  <div class="slide">
+    <div>
+      <span class="header-tag">Slide 6 • System Architecture</span>
+      <h2>Technical Stack & Data Architecture</h2>
+      <p class="lead">
+        Modern, responsive, lightweight, and engineered for high availability with zero server overhead.
+      </p>
+    </div>
+
+    <div class="grid-2" style="margin: 40px 0;">
+      <div class="card">
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 16px; color: #0f172a;">Technology Stack</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 16px;">
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Frontend Core</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">React 18 + Vite 6 (Blazing Fast SPA)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Design System</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">Tailwind CSS v3 + Lucide React</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Typography</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">Google Noto Sans Kannada + Inter</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Speech Synthesis</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">Browser Web Speech API (kn-IN / en-IN fallback)</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Client Persistence</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">HTML5 localStorage (Zero account wall)</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 0; font-weight: 700; color: #64748b;">Automated QA</td>
+            <td style="padding: 12px 0; font-weight: 700; color: #0f172a;">Puppeteer-core Browser Test Suite (14/14 Pass)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card" style="background: #0f172a; color: white;">
+        <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 16px; color: #f8fafc;">Component & Data Flow Diagram</h3>
+        <div style="font-family: monospace; font-size: 14px; line-height: 1.6; color: #cbd5e1; background: #1e293b; padding: 20px; border-radius: 16px;">
+          [ Browser / Client Interface ]<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── React State &amp; Router Hook (Tab Navigation)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── Content Layer<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── vocabulary.js (65+ entries)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── conversations.js (10 dialogues)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── situations.js (10 interactive challenges)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── quizzes.js (30 validated items)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;├── Services Engine<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;├── speech.js (Web Speech API kn-IN)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── storage.js (LocalStorage Persistence)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;└── Gamification (Badges, Streak, Confetti)
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 6 of 7</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: CONCLUSION & FUTURE SCOPE -->
+  <div class="slide slide-dark" style="background: radial-gradient(circle at 50% 30%, #1e293b 0%, #090d16 100%);">
+    <div>
+      <span class="header-tag header-tag-dark">Slide 7 • Conclusion & Future Scope</span>
+      <h2 style="color: #ffffff;">Impact, Inclusion & The Road Ahead</h2>
+      <p class="lead" style="color: #94a3b8;">
+        "Kannada for Everyone" removes language anxiety, celebrates Karnataka's culture, and empowers newcomers to feel truly at home.
+      </p>
+    </div>
+
+    <div class="grid-2" style="margin: 40px 0;">
+      <div class="card card-dark">
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 14px; color: #f59e0b;">Demonstrated Impact</h3>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7; margin-bottom: 12px;">
+          • <strong>Zero Friction Onboarding:</strong> Anyone can start learning in 3 seconds directly on their smartphone or laptop.
+        </p>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7; margin-bottom: 12px;">
+          • <strong>Street-Smart Usability:</strong> Prepares learners for actual Bengaluru situations: bargaining, hiring autos, ordering dosas, and emergency calls.
+        </p>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7;">
+          • <strong>Promotes Harmony:</strong> Fosters mutual appreciation between native Kannadigas and non-Kannada speaking residents.
+        </p>
+      </div>
+
+      <div class="card card-dark">
+        <h3 style="font-size: 24px; font-weight: 800; margin-bottom: 14px; color: #38bdf8;">Future Roadmap</h3>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7; margin-bottom: 12px;">
+          • <strong>Regional Dialect Explorer:</strong> Add North Karnataka (Hubballi-Dharwad) and Coastal Kannada (Kundapura/Mangaluru) variations.
+        </p>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7; margin-bottom: 12px;">
+          • <strong>Speech Recognition Pronunciation Scoring:</strong> Enable users to speak into the microphone and receive instant pronunciation feedback.
+        </p>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.7;">
+          • <strong>Offline PWA Support:</strong> Progressive Web App installable on Android and iOS devices with full offline caching.
+        </p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <p style="font-size: 28px; font-weight: 900; color: #ffffff;" class="kannada-font">
+        ಧನ್ಯವಾದಗಳು! (Thank You!)
+      </p>
+      <p style="font-size: 18px; color: #f59e0b; margin-top: 6px;">
+        Code. Create. Celebrate Kannada. • NIE Mysuru &amp; HackerRank Campus Crew
+      </p>
+    </div>
+
+    <div class="footer-bar footer-bar-dark">
+      <span>Kannada for Everyone • NIE Mysuru Hackathon 2026</span>
+      <span>Slide 7 of 7</span>
+    </div>
+  </div>
+
+</body>
+</html>
+  `;
+
+  const htmlPath = path.join(__dirname, 'submission', 'presentation.html');
+  fs.writeFileSync(htmlPath, htmlContent);
+
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 });
+  await page.goto(`file://${htmlPath}`, { waitUntil: 'domcontentloaded' });
+  await new Promise((r) => setTimeout(r, 1500));
+
+  const pdfPath = path.join(__dirname, 'submission', 'Kannada_For_Everyone_Presentation.pdf');
+  await page.pdf({
+    path: pdfPath,
+    width: '1920px',
+    height: '1080px',
+    printBackground: true,
+    margin: { top: 0, right: 0, bottom: 0, left: 0 },
+  });
+
+  await browser.close();
+  console.log(`✅ Presentation PDF generated at: ${pdfPath}`);
+}
+
+generatePDF();

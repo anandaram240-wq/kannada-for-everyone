@@ -1,0 +1,77 @@
+{
+  "totalTests": 14,
+  "passed": 14,
+  "failed": 0,
+  "details": [
+    {
+      "test": "Website opens without error",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Mobile layout renders cleanly",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Vocabulary module opens",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Mark word as learned interaction works",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Conversations module opens",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Conversation comprehension quiz evaluated",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Situations module opens",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Situation decision challenge completed",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Practice Quiz module opens",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Quiz started successfully",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "All quiz questions answered and submitted",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Progress Dashboard opened",
+      "status": "PASSED",
+      "info": ""
+    },
+    {
+      "test": "Progress data persists after browser reload",
+      "status": "PASSED",
+      "info": "{\"learnedCount\":1,\"quizCount\":1}"
+    },
+    {
+      "test": "Pronunciation & Phonetics module opens",
+      "status": "PASSED",
+      "info": ""
+    }
+  ]
+}
